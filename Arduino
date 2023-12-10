@@ -1,0 +1,62 @@
+#include <Servo.h>
+#include <LiquidCrystal.h>
+
+// Define pin assignments
+int servoPin = 9;          // Servo motor control pin
+int sensorPin = A0;        // Analog sensor pin
+int ledPin = 13;           // LED pin for visual feedback
+int buzzerPin = 8;         // Buzzer pin for audio feedback
+
+// Create instances of libraries
+Servo myServo;
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);  // LCD pins: RS, E, D4, D5, D6, D7
+
+void setup() {
+  // Initialize components
+  myServo.attach(servoPin);
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+  lcd.begin(16, 2);  // Initialize LCD with 16 columns and 2 rows
+}
+
+void loop() {
+  // Read sensor value (adjust this based on your sensor type)
+  int sensorValue = analogRead(sensorPin);
+
+  // Perform skincare production process based on sensor value
+  if (sensorValue > 500) {
+    dispenseSkincare();
+  } else {
+    // Display "Ready" on LCD
+    lcd.clear();
+    lcd.print("Ready");
+    // Reset servo and visual/audio feedback
+    myServo.write(90);  // Reset servo to initial position
+    digitalWrite(ledPin, LOW);  // Turn off LED
+    noTone(buzzerPin);  // Turn off buzzer
+  }
+
+  // Add appropriate delays or additional logic as needed
+  delay(1000);
+}
+
+void dispenseSkincare() {
+  // Perform skincare dispensing actions
+  lcd.clear();
+  lcd.print("Dispensing...");
+  
+  // Activate servo motor for dispensing
+  myServo.write(180);  // Adjust angle as needed
+  digitalWrite(ledPin, HIGH);  // Turn on LED for visual feedback
+  tone(buzzerPin, 1000);  // Activate buzzer for audio feedback
+
+  // Add any additional actions for dispensing
+
+  // Delay to simulate dispensing time
+  delay(5000);  // Adjust as needed
+  
+  // Reset servo and visual/audio feedback after dispensing
+  myServo.write(90);  // Reset servo to initial position
+  digitalWrite(ledPin, LOW);  // Turn off LED
+  noTone(buzzerPin);  // Turn off buzzer
+}
